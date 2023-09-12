@@ -1,6 +1,6 @@
 # laundry_flutter
 
-A new Flutter project.
+mobile-based laundry booking application with flutter and laravel php backend
 
 ## Getting Started
 
