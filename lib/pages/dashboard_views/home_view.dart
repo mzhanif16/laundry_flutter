@@ -17,6 +17,7 @@ import 'package:laundry_flutter/datasources/promo_datasource.dart';
 import 'package:laundry_flutter/datasources/shop_datasource.dart';
 import 'package:laundry_flutter/models/promo_model.dart';
 import 'package:laundry_flutter/models/shop_model.dart';
+import 'package:laundry_flutter/pages/detail_shop_page.dart';
 import 'package:laundry_flutter/pages/search_by_city_page.dart';
 import 'package:laundry_flutter/providers/home_provider.dart';
 import 'package:laundry_flutter/widgets/error_background.dart';
@@ -34,9 +35,11 @@ class HomeView extends ConsumerStatefulWidget {
 
 class _HomeViewState extends ConsumerState<HomeView> {
   static final edtSearch = TextEditingController();
-  gotoSearchCity(){
+
+  gotoSearchCity() {
     Nav.push(context, SearchByCity(query: edtSearch.text));
   }
+
   getPromo() {
     PromoDataSource.readLimit().then((value) {
       String newStatus = '';
@@ -73,6 +76,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
       });
     });
   }
+
   getRecommendation() {
     ShopDataSource.readRecommendationLimit().then((value) {
       String newStatus = '';
@@ -109,10 +113,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
     });
   }
 
-  refresh(){
+  refresh() {
     getPromo();
     getRecommendation();
   }
+
   @override
   void initState() {
     refresh();
@@ -122,7 +127,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async=> refresh(),
+      onRefresh: () async => refresh(),
       child: ListView(
         children: [
           header(),
@@ -136,6 +141,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
       ),
     );
   }
+
   Padding header() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 20, 30, 30),
@@ -170,9 +176,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   Text(
                     'Find by city',
                     style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w300,
-                        color: Colors.grey[600]
-                    ),
+                        fontWeight: FontWeight.w300, color: Colors.grey[600]),
                   )
                 ],
               ),
@@ -184,11 +188,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       child: Container(
                         decoration: BoxDecoration(
                             color: Colors.blue[50],
-                            borderRadius: BorderRadius.circular(10)
-                        ),
+                            borderRadius: BorderRadius.circular(10)),
                         child: Row(
                           children: [
-                            IconButton(onPressed: () => gotoSearchCity(),
+                            IconButton(
+                              onPressed: () => gotoSearchCity(),
                               icon: const Icon(Icons.search),
                             ),
                             Expanded(
@@ -207,7 +211,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     ),
                     DView.spaceWidth(),
                     DButtonElevation(
-                      onClick: (){},
+                      onClick: () {},
                       mainColor: AppColors.secondary,
                       splashColor: AppColors.secondary,
                       width: 50,
@@ -225,344 +229,346 @@ class _HomeViewState extends ConsumerState<HomeView> {
   }
 
   Consumer categories() {
-    return Consumer(builder: (_, wiRef, __){
-      String categorySelected = wiRef.watch(homeCategoryProvider);
-      return SizedBox(
-        height: 30,
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: AppConstants.homeCategories.length,
-            itemBuilder: (context, index){
-              String category = AppConstants.homeCategories[index];
-              return Padding(
-                padding: EdgeInsets.fromLTRB(
-                  index == 0 ? 30 : 8,
-                  0,
-                  index == AppConstants.homeCategories.length - 1 ? 30 : 8,
-                  0,
-                ),
-                child: InkWell(
-                  onTap: () {
-                    setHomeCategory(ref, category);
-                  },
-                  borderRadius: BorderRadius.circular(30),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
+    return Consumer(
+      builder: (_, wiRef, __) {
+        String categorySelected = wiRef.watch(homeCategoryProvider);
+        return SizedBox(
+          height: 30,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: AppConstants.homeCategories.length,
+              itemBuilder: (context, index) {
+                String category = AppConstants.homeCategories[index];
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    index == 0 ? 30 : 8,
+                    0,
+                    index == AppConstants.homeCategories.length - 1 ? 30 : 8,
+                    0,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      setHomeCategory(ref, category);
+                    },
+                    borderRadius: BorderRadius.circular(30),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: categorySelected == category
+                                ? AppColors.primary
+                                : Colors.grey[400]!,
+                          ),
                           color: categorySelected == category
                               ? AppColors.primary
-                              : Colors.grey[400]!,
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(30)),
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        category,
+                        style: TextStyle(
+                          height: 1,
+                          color: categorySelected == category
+                              ? Colors.white
+                              : Colors.black,
                         ),
-                        color: categorySelected == category
-                            ? AppColors.primary
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(30)
-                    ),
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      category,
-                      style: TextStyle(
-                        height: 1,
-                        color: categorySelected == category
-                            ? Colors.white : Colors.black,
                       ),
                     ),
                   ),
-                ),
-              );
-            }),
-      );
-    },
+                );
+              }),
+        );
+      },
     );
   }
 
   Consumer promo() {
     final pageController = PageController();
-    return Consumer(builder: (_, wiRef, __){
-        List<PromoModel> list = wiRef.watch(homePromoListProvider);
-        return Column(
-          children: [
-            Padding(padding: const EdgeInsets.fromLTRB(30, 0, 30, 16),
+    return Consumer(builder: (_, wiRef, __) {
+      List<PromoModel> list = wiRef.watch(homePromoListProvider);
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 0, 30, 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 DView.textTitle('Promo', color: Colors.black),
-                DView.textAction(() { }, color: AppColors.primary)
+                DView.textAction(() {}, color: AppColors.primary)
               ],
             ),
-            ),
-            if(list.isEmpty) Padding(
+          ),
+          if (list.isEmpty)
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: const ErrorBackgorud(ratio: 16/9, message: 'No Promo'),
+              child: const ErrorBackgorud(ratio: 16 / 9, message: 'No Promo'),
             ),
-            if(list.isNotEmpty) AspectRatio(aspectRatio: 16/9 ,
-            child: PageView.builder(
-              controller: pageController,
-                itemCount: list.length,
-                itemBuilder: (context, index){
-                  PromoModel item = list[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: FadeInImage(
-                                placeholder: const AssetImage(AppAssets.placeHolderLaundry),
-                                image: NetworkImage(
-                                    '${AppConstants.baseImageURL}/promo/${item.image}',
-                                ),
-                              fit: BoxFit.cover,
-                              imageErrorBuilder: (context,error,stackTrace){
-                                  return const Icon(Icons.error);
-                            },
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Colors.white,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 30,
-                              vertical: 6,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                    item.shop.name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                DView.spaceHeight(4),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      '${AppFormat.shortPrice(item.newPrice)} / kg',
-                                      style: const TextStyle(
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-                                    DView.spaceWidth(),
-                                    Text(
-                                      '${AppFormat.shortPrice(item.oldPrice)}/ kg',
-                                      style: const TextStyle(
-                                        color: Colors.red,
-                                        decoration: TextDecoration.lineThrough,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                }
-            ),
-            ),
-            if(list.isNotEmpty) DView.spaceHeight(8),
-            if(list.isNotEmpty)
-            SmoothPageIndicator(
-                controller: pageController,
-                count: list.length,
-              effect: WormEffect(
-                dotHeight: 4,
-                dotWidth: 12,
-                dotColor: Colors.grey[300]!,
-                activeDotColor: AppColors.primary
-              ),
-            )
-          ],
-        );
-      });
-  }
-
-  Consumer recommendation(){
-    return Consumer(builder: (_, wiRef,__){
-      List<ShopModel> list = wiRef.watch(homeRecommendationListProvider);
-      return Column(
-        children: [
-          Padding(padding: const EdgeInsets.fromLTRB(30, 0, 30, 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              DView.textTitle('Recommendation', color: Colors.black),
-              DView.textAction(() {}, color: AppColors.primary),
-            ],
-          ),
-          ),
-          if (list.isEmpty) Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: const ErrorBackgorud(ratio: 1.2, message: 'No Recommendation Yet'),
-          ),
-          if(list.isNotEmpty) SizedBox(
-            height: 250,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: list.length,
-                itemBuilder: (context, index){
-                  ShopModel item = list[index];
-                  return GestureDetector(
-                    onTap: (){},
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(index == 0 ? 30 : 10,
-                          0,
-                          index == list.length - 1 ? 30 : 10,
-                          0
-                      ),
-                      width: 200,
+          if (list.isNotEmpty)
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: PageView.builder(
+                  controller: pageController,
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    PromoModel item = list[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: Stack(
                         fit: StackFit.expand,
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: FadeInImage(
-                              placeholder: const AssetImage(AppAssets.placeHolderLaundry),
-                              image: NetworkImage(
-                                '${AppConstants.baseImageURL}/shop/${item.image}',
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: FadeInImage(
+                                placeholder: const AssetImage(
+                                    AppAssets.placeHolderLaundry),
+                                image: NetworkImage(
+                                  '${AppConstants.baseImageURL}/promo/${item.image}',
+                                ),
+                                fit: BoxFit.cover,
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  return const Icon(Icons.error);
+                                },
                               ),
-                              fit: BoxFit.cover,
-                              imageErrorBuilder: (context,error,stackTrace){
-                                return const Icon(Icons.error);
-                              },
                             ),
                           ),
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: Container(
-                              height: 150,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10)
-                                ),
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.transparent,
-                                    Colors.black
-                                  ],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                )
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white,
                               ),
-                            ),
-                          ),
-                          Positioned(
-                            left: 8,
-                            bottom: 8,
-                            right: 8,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: ['Regular', 'Express'].map((e){
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        color: AppColors.primary.withOpacity(0.5),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      margin: const EdgeInsets.only(right: 4),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 4
-                                      ),
-                                      child: Text(
-                                        e,
-                                        style: const TextStyle(
-                                          height: 1,
-                                          color: Colors.white
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                                DView.spaceHeight(8),
-                                Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 30,
+                                vertical: 6,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    item.shop.name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
                                   ),
-                                  padding: const EdgeInsets.all(8),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  DView.spaceHeight(4),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        item.name,
-                                        style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
+                                        '${AppFormat.shortPrice(item.newPrice)} / kg',
+                                        style: const TextStyle(
+                                          color: AppColors.primary,
                                         ),
                                       ),
-                                      DView.spaceHeight(4),
-                                      Row(
-                                        children: [
-                                          RatingBar.builder(
+                                      DView.spaceWidth(),
+                                      Text(
+                                        '${AppFormat.shortPrice(item.oldPrice)}/ kg',
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }),
+            ),
+          if (list.isNotEmpty) DView.spaceHeight(8),
+          if (list.isNotEmpty)
+            SmoothPageIndicator(
+              controller: pageController,
+              count: list.length,
+              effect: WormEffect(
+                  dotHeight: 4,
+                  dotWidth: 12,
+                  dotColor: Colors.grey[300]!,
+                  activeDotColor: AppColors.primary),
+            )
+        ],
+      );
+    });
+  }
+
+  Consumer recommendation() {
+    return Consumer(builder: (_, wiRef, __) {
+      List<ShopModel> list = wiRef.watch(homeRecommendationListProvider);
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 0, 30, 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                DView.textTitle('Recommendation', color: Colors.black),
+                DView.textAction(() {}, color: AppColors.primary),
+              ],
+            ),
+          ),
+          if (list.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: const ErrorBackgorud(
+                  ratio: 1.2, message: 'No Recommendation Yet'),
+            ),
+          if (list.isNotEmpty)
+            SizedBox(
+              height: 250,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    ShopModel item = list[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Nav.push(context, DetailShopPage(shop: item));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(index == 0 ? 30 : 10, 0,
+                            index == list.length - 1 ? 30 : 10, 0),
+                        width: 200,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: FadeInImage(
+                                placeholder: const AssetImage(
+                                    AppAssets.placeHolderLaundry),
+                                image: NetworkImage(
+                                  '${AppConstants.baseImageURL}/shop/${item.image}',
+                                ),
+                                fit: BoxFit.cover,
+                                imageErrorBuilder:
+                                    (context, error, stackTrace) {
+                                  return const Icon(Icons.error);
+                                },
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                height: 150,
+                                decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Colors.transparent,
+                                        Colors.black
+                                      ],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    )),
+                              ),
+                            ),
+                            Positioned(
+                              left: 8,
+                              bottom: 8,
+                              right: 8,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: ['Regular', 'Express'].map((e) {
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primary
+                                              .withOpacity(0.5),
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                        ),
+                                        margin: const EdgeInsets.only(right: 4),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
+                                        child: Text(
+                                          e,
+                                          style: const TextStyle(
+                                              height: 1, color: Colors.white),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                  DView.spaceHeight(8),
+                                  Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    padding: const EdgeInsets.all(8),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item.name,
+                                          style: GoogleFonts.poppins(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                        DView.spaceHeight(4),
+                                        Row(
+                                          children: [
+                                            RatingBar.builder(
                                               initialRating: item.rate,
                                               itemCount: 5,
                                               allowHalfRating: true,
-                                              itemPadding: const EdgeInsets.all(0),
+                                              itemPadding:
+                                                  const EdgeInsets.all(0),
                                               unratedColor: Colors.grey[300],
-                                              itemBuilder: (context, index)=>
-                                              const Icon(
+                                              itemBuilder: (context, index) =>
+                                                  const Icon(
                                                 Icons.star,
                                                 color: Colors.amber,
                                               ),
                                               itemSize: 12,
                                               onRatingUpdate: (value) {},
                                               ignoreGestures: true,
-                                          ),
-                                          DView.spaceWidth(4),
-                                          Text(
-                                            '(${item.rate})',
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black87,
-                                              fontSize: 11
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      DView.spaceHeight(4),
-                                      Text(
-                                        item.location,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: GoogleFonts.poppins(
-                                          fontSize: 12,
-                                          color: Colors.grey
+                                            DView.spaceWidth(4),
+                                            Text(
+                                              '(${item.rate})',
+                                              style: GoogleFonts.poppins(
+                                                  color: Colors.black,
+                                                  fontSize: 11),
+                                            ),
+                                          ],
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
+                                        DView.spaceHeight(4),
+                                        Text(
+                                          item.location,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: GoogleFonts.poppins(
+                                              fontSize: 12, color: Colors.grey),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }
-            ),
-          )
+                    );
+                  }),
+            )
         ],
       );
     });
   }
-
-
-
 }
