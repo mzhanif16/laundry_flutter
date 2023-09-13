@@ -8,7 +8,6 @@ import 'package:laundry_flutter/config/app_assets.dart';
 import 'package:laundry_flutter/config/app_colors.dart';
 import 'package:laundry_flutter/config/app_constants.dart';
 import 'package:laundry_flutter/config/app_format.dart';
-import 'package:laundry_flutter/config/nav.dart';
 import 'package:laundry_flutter/models/shop_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
@@ -195,7 +194,7 @@ class DetailShopPage extends StatelessWidget {
                       end: Alignment.topCenter
                     )
                   ),
-                  padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,7 +283,7 @@ class DetailShopPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                         color: AppColors.primary,
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -295,7 +294,7 @@ class DetailShopPage extends StatelessWidget {
                             ),
                           ),
                           DView.spaceWidth(4),
-                          Icon(Icons.check_circle,
+                          const Icon(Icons.check_circle,
                           color: Colors.white, size: 14),
                         ],
                       ),

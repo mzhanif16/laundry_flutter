@@ -1,9 +1,6 @@
-import 'dart:math';
 
 import 'package:d_button/d_button.dart';
-import 'package:d_info/d_info.dart';
 import 'package:d_view/d_view.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +20,6 @@ import 'package:laundry_flutter/providers/home_provider.dart';
 import 'package:laundry_flutter/widgets/error_background.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../config/app_response.dart';
 import '../../config/failure.dart';
 
 class HomeView extends ConsumerStatefulWidget {
@@ -216,7 +212,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       splashColor: AppColors.secondary,
                       width: 50,
                       radius: 10,
-                      child: Icon(Icons.tune, color: Colors.white),
+                      child: const Icon(Icons.tune, color: Colors.white),
                     )
                   ],
                 ),
@@ -299,9 +295,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
             ),
           ),
           if (list.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: const ErrorBackgorud(ratio: 16 / 9, message: 'No Promo'),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: ErrorBackgorud(ratio: 16 / 9, message: 'No Promo'),
             ),
           if (list.isNotEmpty)
             AspectRatio(
@@ -417,9 +413,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
             ),
           ),
           if (list.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: const ErrorBackgorud(
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: ErrorBackgorud(
                   ratio: 1.2, message: 'No Recommendation Yet'),
             ),
           if (list.isNotEmpty)

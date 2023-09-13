@@ -21,7 +21,7 @@ class Account extends StatelessWidget {
       if(yes??false){
         AppSession.removeBearerToken();
         AppSession.removeUser();
-        Nav.replace(context, LoginPage());
+        Nav.replace(context, const LoginPage());
       }
     });
   }
@@ -127,7 +127,7 @@ class Account extends StatelessWidget {
               ),
              Padding(
                padding: const EdgeInsets.symmetric(horizontal: 30),
-               child: OutlinedButton(onPressed:() => logout(context), child: Text(
+               child: OutlinedButton(onPressed:() => logout(context), child: const Text(
                  'Logout'
                )),
              ),
@@ -204,7 +204,7 @@ class Account extends StatelessWidget {
                     applicationName: 'Laundry App',
                     applicationVersion: 'v1.0.0',
                     children: [
-                      Text(
+                      const Text(
                         'Laundry Market App powered by Flutter'
                       )
                     ]

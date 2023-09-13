@@ -96,7 +96,7 @@ class _SearchByCityState extends ConsumerState<SearchByCity> {
           ),
         ),
         actions: [
-          IconButton(onPressed: ()=>execute(), icon: Icon(Icons.search))
+          IconButton(onPressed: ()=>execute(), icon: const Icon(Icons.search))
         ],
       ),
       body: Consumer(

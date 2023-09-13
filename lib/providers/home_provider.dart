@@ -7,7 +7,7 @@ final homeStatusProvider = StateProvider.autoDispose((ref) => '');
 final homeRecommendationStatus = StateProvider.autoDispose((ref) => '');
 
 setHomeCategory(WidgetRef ref, String newCategory){
-  ref.read(homeCategoryProvider.notifier).state;
+  ref.read(homeCategoryProvider.notifier).state = newCategory;
 }
 
 setHomePromoStatus(WidgetRef ref, String newStatus){

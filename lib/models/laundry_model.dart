@@ -51,8 +51,8 @@ class LaundryModel {
     total: json["total"]?.toDouble(),
     description: json["description"],
     status: json["status"],
-    createdAt: DateTime.parse(json["created_at"]).toLocal(),
-    updatedAt: DateTime.parse(json["updated_at"]).toLocal(),
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
     user: UserModel.fromJson(json["user"]),
     shop: ShopModel.fromJson(json["shop"]),
   );

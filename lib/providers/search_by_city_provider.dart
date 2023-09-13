@@ -1,4 +1,3 @@
-import 'package:d_method/d_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/shop_model.dart';

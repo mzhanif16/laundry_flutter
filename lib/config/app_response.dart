@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:d_method/d_method.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:laundry_flutter/config/failure.dart';
@@ -51,7 +50,7 @@ class AppResponse{
                     return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('- '),
+                      const Text('- '),
                       Expanded(child: Text(itemError)),
                     ],
                 );
