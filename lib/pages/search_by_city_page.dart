@@ -12,6 +12,7 @@ import 'package:laundry_flutter/providers/search_by_city_provider.dart';
 
 class SearchByCity extends ConsumerStatefulWidget {
   const SearchByCity({super.key, required this.query});
+
   final String query;
 
   @override
@@ -22,10 +23,10 @@ class _SearchByCityState extends ConsumerState<SearchByCity> {
   final edtSearch = TextEditingController();
 
   execute() {
-    ShopDataSource.searchByCity(edtSearch.text).then((value){
+    ShopDataSource.searchByCity(edtSearch.text).then((value) {
       setSearchByCityStatus(ref, 'Loading');
       value.fold((failure) {
-        switch(failure.runtimeType){
+        switch (failure.runtimeType) {
           case ServerFailure:
             setSearchByCityStatus(ref, 'Server Error');
             break;
@@ -44,19 +45,18 @@ class _SearchByCityState extends ConsumerState<SearchByCity> {
           default:
             break;
         }
-      }, (result){
+      }, (result) {
         setSearchByCityStatus(ref, 'Success');
         List data = result['data'];
         List<ShopModel> list = data.map((e) => ShopModel.fromJson(e)).toList();
         ref.read(searchByCityListProvider.notifier).setData(list);
-      }
-      );
+      });
     });
   }
 
   @override
   void initState() {
-    if(widget.query != ''){
+    if (widget.query != '') {
       edtSearch.text = widget.query;
       execute();
     }
@@ -70,65 +70,62 @@ class _SearchByCityState extends ConsumerState<SearchByCity> {
         titleSpacing: 0,
         title: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10)
-          ),
+              color: Colors.white, borderRadius: BorderRadius.circular(10)),
           height: 40,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
-              Text('City: ',
-              style: GoogleFonts.poppins(
-                color: Colors.black54,
-                fontSize: 16,
-                height: 1),
+              Text(
+                'City: ',
+                style: GoogleFonts.poppins(
+                    color: Colors.black54, fontSize: 16, height: 1),
               ),
-              Expanded(child: TextField(
+              Expanded(
+                  child: TextField(
                 controller: edtSearch,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   isDense: true,
                 ),
                 style: GoogleFonts.poppins(height: 1),
-                onSubmitted: (value)=>execute(),
+                onSubmitted: (value) => execute(),
               ))
             ],
           ),
         ),
         actions: [
-          IconButton(onPressed: ()=>execute(), icon: const Icon(Icons.search))
+          IconButton(onPressed: () => execute(), icon: const Icon(Icons.search))
         ],
       ),
       body: Consumer(
-        builder: (_,wiRef,__){
+        builder: (_, wiRef, __) {
           String status = wiRef.watch(searchByCityStatusProvider);
           List<ShopModel> list = wiRef.watch(searchByCityListProvider);
-          if(status==''){
+          if (status == '') {
             return DView.nothing();
           }
-          if(status=='Loading') return DView.loadingCircle();
+          if (status == 'Loading') return DView.loadingCircle();
 
-          if(status=='Success'){
+          if (status == 'Success') {
             return ListView.builder(
-              itemCount: list.length,
-                itemBuilder: (context,index){
-                ShopModel shop = list[index];
-                return ListTile(
-                  onTap: (){
-                    Nav.push(context, DetailShopPage(shop: shop));
-                  },
-                  leading: CircleAvatar(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    radius: 18,
-                    child: Text('${index+1}'),
-                  ),
-                  title: Text(shop.name),
-                  subtitle: Text(shop.city),
-                  trailing: const Icon(Icons.navigate_next),
-                );
-                }
-                );
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  ShopModel shop = list[index];
+                  return ListTile(
+                    onTap: () {
+                      Nav.push(context, DetailShopPage(shop: shop));
+                    },
+                    leading: CircleAvatar(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      radius: 18,
+                      child: Text('${index + 1}'),
+                    ),
+                    title: Text(shop.name),
+                    subtitle: Text(shop.city),
+                    trailing: const Icon(Icons.navigate_next),
+                  );
+                });
           }
           return DView.error(status);
         },

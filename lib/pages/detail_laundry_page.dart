@@ -10,6 +10,7 @@ import 'detail_shop_page.dart';
 
 class DetailLaundryPage extends StatelessWidget {
   const DetailLaundryPage({super.key, required this.laundry});
+
   final LaundryModel laundry;
 
   @override
@@ -89,7 +90,6 @@ class DetailLaundryPage extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(color: Colors.black54),
             ),
           ),
         ],

@@ -1,4 +1,3 @@
-
 import 'package:d_info/d_info.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
@@ -14,18 +13,19 @@ import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 class DetailShopPage extends StatelessWidget {
   const DetailShopPage({super.key, required this.shop});
+
   final ShopModel shop;
+
   launchWa(BuildContext context, String number) async {
     bool? yes = await DInfo.dialogConfirmation(
-        context, 'Chat Via Whatsapp', 'Yes to confirm',
+      context,
+      'Chat Via Whatsapp',
+      'Yes to confirm',
     );
-    if(yes ?? false){
-      final link = WhatsAppUnilink(
-        phoneNumber: number,
-        text: 'TEST'
-      );
-      if(await canLaunchUrl(link.asUri())){
-        launchUrl(link.asUri(),mode: LaunchMode.externalApplication);
+    if (yes ?? false) {
+      final link = WhatsAppUnilink(phoneNumber: number, text: 'TEST');
+      if (await canLaunchUrl(link.asUri())) {
+        launchUrl(link.asUri(), mode: LaunchMode.externalApplication);
       }
     }
   }
@@ -47,12 +47,12 @@ class DetailShopPage extends StatelessWidget {
           Container(
             height: 50,
             margin: const EdgeInsets.symmetric(horizontal: 26),
-            child: ElevatedButton(onPressed: (){},
+            child: ElevatedButton(
+                onPressed: () {},
                 child: const Text(
                   'Order',
-                  style: TextStyle(height: 1,fontSize: 18),
-                )
-            ),
+                  style: TextStyle(height: 1, fontSize: 18),
+                )),
           ),
           DView.spaceHeight(8),
         ],
@@ -62,107 +62,116 @@ class DetailShopPage extends StatelessWidget {
 
   Padding description() {
     return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 26),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DView.textTitle('Description', color: Colors.black87),
-              DView.spaceHeight(6),
-              Text(shop.description,
-                textAlign: TextAlign.justify,
-                style: const TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16
-              ),
-              )
-            ],
+      padding: const EdgeInsets.symmetric(horizontal: 26),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Description',
+            style: TextStyle(height: 1, fontSize: 20),
           ),
-        );
+          DView.spaceHeight(6),
+          Text(
+            shop.description,
+            textAlign: TextAlign.justify,
+            style: const TextStyle(fontSize: 16),
+          )
+        ],
+      ),
+    );
   }
 
   Padding category() {
     return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 26),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DView.textTitle('Category',color: Colors.black87),
-              DView.spaceHeight(8),
-              Wrap(
-                spacing: 8,
-                children: [
-                'Regular',
-                'Express',
-                'Economical',
-                'Exclusive',
-              ].map((e) {
-                return Chip(
-                  visualDensity: const VisualDensity(vertical: -2),
-                  label: Text(e, style: GoogleFonts.poppins(height: 0, fontSize: 11)),
-                  backgroundColor: Colors.white,
-                  side: const BorderSide(color: AppColors.primary),
-                );
-              }).toList(),
-              ),
-            ],
+      padding: const EdgeInsets.symmetric(horizontal: 26),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Category',
+            style: TextStyle(height: 1, fontSize: 20),
           ),
-        );
+          DView.spaceHeight(8),
+          Wrap(
+            spacing: 8,
+            children: [
+              'Regular',
+              'Express',
+              'Economical',
+              'Exclusive',
+            ].map((e) {
+              return Chip(
+                visualDensity: const VisualDensity(vertical: -2),
+                label: Text(e,
+                    style: GoogleFonts.poppins(
+                        height: 0, fontSize: 11, color: Colors.black)),
+                backgroundColor: Colors.white,
+                side: const BorderSide(color: AppColors.primary),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
   }
 
   Padding groupItemInfo(BuildContext context) {
     return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 26),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                  itemInfo(const Icon(
+      padding: const EdgeInsets.symmetric(horizontal: 26),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                itemInfo(
+                  const Icon(
                     Icons.location_city_rounded,
                     color: AppColors.primary,
                     size: 20,
                   ),
-                    shop.city,
-                  ),
-                  DView.spaceHeight(6),
-                  itemInfo(const Icon(
+                  shop.city,
+                ),
+                DView.spaceHeight(6),
+                itemInfo(
+                  const Icon(
                     Icons.location_on,
                     color: AppColors.primary,
                     size: 20,
                   ),
-                    shop.location,
-                  ),
-                  DView.spaceHeight(6),
-                  GestureDetector(
-                    onTap: ()=> launchWa(context, shop.whatsapp),
-                    child: itemInfo(
-                      Image.asset(AppAssets.wa,height: 20,),
-                      shop.whatsapp,
+                  shop.location,
+                ),
+                DView.spaceHeight(6),
+                GestureDetector(
+                  onTap: () => launchWa(context, shop.whatsapp),
+                  child: itemInfo(
+                    Image.asset(
+                      AppAssets.wa,
+                      height: 20,
                     ),
+                    shop.whatsapp,
                   ),
-                ],),
-              ),
-              DView.spaceWidth(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(AppFormat.longPrice(shop.price),
-                  textAlign: TextAlign.right,
-                    style: GoogleFonts.poppins(
-                      height: 1,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primary
-                    ),
-                  ),
-                  const Text('/kg')
-                ],
-              )
-            ],
+                ),
+              ],
+            ),
           ),
-        );
+          DView.spaceWidth(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                AppFormat.longPrice(shop.price),
+                textAlign: TextAlign.right,
+                style: GoogleFonts.poppins(
+                    height: 1, fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              const Text('/kg')
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   Widget headerImage(BuildContext context) {
@@ -186,14 +195,11 @@ class DetailShopPage extends StatelessWidget {
                 aspectRatio: 2,
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    gradient: const LinearGradient(colors: [
-                      Colors.black, Colors.transparent
-                    ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter
-                    )
-                  ),
+                      borderRadius: BorderRadius.circular(20),
+                      gradient: const LinearGradient(
+                          colors: [Colors.black, Colors.transparent],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter)),
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -202,10 +208,9 @@ class DetailShopPage extends StatelessWidget {
                       Text(
                         shop.name,
                         style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600
-                        ),
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600),
                       ),
                       DView.spaceHeight(8),
                       Row(
@@ -216,8 +221,7 @@ class DetailShopPage extends StatelessWidget {
                             allowHalfRating: true,
                             itemPadding: const EdgeInsets.all(0),
                             unratedColor: Colors.grey[300],
-                            itemBuilder: (context, index)=>
-                            const Icon(
+                            itemBuilder: (context, index) => const Icon(
                               Icons.star,
                               color: Colors.amber,
                             ),
@@ -229,23 +233,22 @@ class DetailShopPage extends StatelessWidget {
                           Text(
                             '(${shop.rate})',
                             style: GoogleFonts.poppins(
-                                color: Colors.white70,
-                                fontSize: 11),
+                                color: Colors.white70, fontSize: 11),
                           ),
                         ],
                       ),
                       !shop.pickup && !shop.delivery
                           ? DView.nothing()
-                          :Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Row(
-                          children: [
-                            if(shop.pickup) childOrder('Pickup'),
-                            if(shop.delivery) DView.spaceWidth(8),
-                            if(shop.delivery) childOrder('Delivery'),
-                          ],
-                        ),
-                      )
+                          : Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Row(
+                                children: [
+                                  if (shop.pickup) childOrder('Pickup'),
+                                  if (shop.delivery) DView.spaceWidth(8),
+                                  if (shop.delivery) childOrder('Delivery'),
+                                ],
+                              ),
+                            )
                     ],
                   ),
                 ),
@@ -259,15 +262,15 @@ class DetailShopPage extends StatelessWidget {
                 child: FloatingActionButton.extended(
                   backgroundColor: Colors.white,
                   heroTag: 'fab-back-button',
-                    onPressed: ()=>Navigator.pop(context),
-                    label: const Text('Back',
+                  onPressed: () => Navigator.pop(context),
+                  label: const Text(
+                    'Back',
                     style: TextStyle(
-                    height: 1, fontSize: 16, fontWeight: FontWeight.bold
-                    ),
-                    ),
-                  icon: const Icon(Icons.navigate_before ),
+                        height: 1, fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  icon: const Icon(Icons.navigate_before),
                   extendedIconLabelSpacing: 0,
-                  extendedPadding: const EdgeInsets.only(left: 10,right: 16),
+                  extendedPadding: const EdgeInsets.only(left: 10, right: 16),
                 ),
               ),
             ),
@@ -279,45 +282,42 @@ class DetailShopPage extends StatelessWidget {
 
   Container childOrder(String name) {
     return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: AppColors.primary,
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                              name,
-                            style: const TextStyle(
-                              color: Colors.white, height: 1
-                            ),
-                          ),
-                          DView.spaceWidth(4),
-                          const Icon(Icons.check_circle,
-                          color: Colors.white, size: 14),
-                        ],
-                      ),
-                    );
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: AppColors.primary,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            name,
+            style: const TextStyle(color: Colors.white, height: 1),
+          ),
+          DView.spaceWidth(4),
+          const Icon(Icons.check_circle, color: Colors.white, size: 14),
+        ],
+      ),
+    );
   }
 
-  Widget itemInfo(Widget icon, String text){
+  Widget itemInfo(Widget icon, String text) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-      Container(
-        width: 30,
-          height: 20,
-          alignment: Alignment.centerLeft,
-          child: icon),
-        Expanded(child: Text(
+        Container(
+            width: 30,
+            height: 20,
+            alignment: Alignment.centerLeft,
+            child: icon),
+        Expanded(
+            child: Text(
           text,
           style: GoogleFonts.poppins(
-            color: Colors.black87,
             fontSize: 16,
           ),
         ))
-    ],
+      ],
     );
   }
 }

@@ -6,33 +6,38 @@ final homeCategoryProvider = StateProvider.autoDispose((ref) => 'All');
 final homeStatusProvider = StateProvider.autoDispose((ref) => '');
 final homeRecommendationStatus = StateProvider.autoDispose((ref) => '');
 
-setHomeCategory(WidgetRef ref, String newCategory){
+setHomeCategory(WidgetRef ref, String newCategory) {
   ref.read(homeCategoryProvider.notifier).state = newCategory;
 }
 
-setHomePromoStatus(WidgetRef ref, String newStatus){
+setHomePromoStatus(WidgetRef ref, String newStatus) {
   ref.read(homeStatusProvider.notifier).state;
 }
 
-setHomeRecommendationStatus(WidgetRef ref, String newStatus){
+setHomeRecommendationStatus(WidgetRef ref, String newStatus) {
   ref.read(homeRecommendationStatus.notifier).state;
 }
 
-final homePromoListProvider = StateNotifierProvider.autoDispose<HomePromoList,List<PromoModel>>
-  ((ref) => HomePromoList([]));
+final homePromoListProvider =
+    StateNotifierProvider.autoDispose<HomePromoList, List<PromoModel>>(
+        (ref) => HomePromoList([]));
 
-class HomePromoList extends StateNotifier<List<PromoModel>>{
+class HomePromoList extends StateNotifier<List<PromoModel>> {
   HomePromoList(super.state);
-  setData(List<PromoModel> newData){
+
+  setData(List<PromoModel> newData) {
     state = newData;
   }
 }
-final homeRecommendationListProvider = StateNotifierProvider.autoDispose<HomeRecommendationList,List<ShopModel>>
-  ((ref) => HomeRecommendationList([]));
 
-class HomeRecommendationList extends StateNotifier<List<ShopModel>>{
+final homeRecommendationListProvider =
+    StateNotifierProvider.autoDispose<HomeRecommendationList, List<ShopModel>>(
+        (ref) => HomeRecommendationList([]));
+
+class HomeRecommendationList extends StateNotifier<List<ShopModel>> {
   HomeRecommendationList(super.state);
-  setData(List<ShopModel> newData){
+
+  setData(List<ShopModel> newData) {
     state = newData;
   }
 }

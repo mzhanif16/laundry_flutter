@@ -1,4 +1,3 @@
-
 import 'package:d_button/d_button.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +20,7 @@ import 'package:laundry_flutter/widgets/error_background.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../config/failure.dart';
+import '../../providers/theme_provider.dart';
 
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
@@ -137,6 +137,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
   }
 
   Padding header() {
+    var themeMode = ref.watch(themeProvider);
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 20, 30, 30),
       child: Column(
@@ -151,10 +152,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
           Text(
             'to clean your clothes',
             style: GoogleFonts.poppins(
-                color: Colors.black54,
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-                height: 1),
+                fontSize: 20, fontWeight: FontWeight.w400, height: 1),
           ),
           DView.spaceHeight(20),
           Column(
@@ -187,14 +185,31 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           children: [
                             IconButton(
                               onPressed: () => gotoSearchCity(),
-                              icon: const Icon(Icons.search),
+                              icon: Icon(
+                                Icons.search,
+                                color: themeMode == ThemeMode.dark
+                                    ? Colors.black
+                                    : Colors.black,
+                              ),
                             ),
                             Expanded(
                               child: TextField(
+                                cursorColor: themeMode == ThemeMode.dark
+                                    ? Colors.black
+                                    : Colors.black,
+                                // Set cursor color
+                                style: TextStyle(
+                                    color: themeMode == ThemeMode.dark
+                                        ? Colors.black
+                                        : Colors.black),
                                 controller: edtSearch,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: 'Search...',
+                                  hintStyle: TextStyle(
+                                      color: themeMode == ThemeMode.dark
+                                          ? Colors.black
+                                          : Colors.black),
                                 ),
                                 onSubmitted: (value) => gotoSearchCity(),
                               ),
@@ -264,7 +279,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           height: 1,
                           color: categorySelected == category
                               ? Colors.white
-                              : Colors.black,
+                              : AppColors.primary,
                         ),
                       ),
                     ),
@@ -287,7 +302,10 @@ class _HomeViewState extends ConsumerState<HomeView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                DView.textTitle('Promo', color: Colors.black),
+                const Text(
+                  'Promo',
+                  style: TextStyle(fontSize: 20),
+                ),
                 DView.textAction(() {}, color: AppColors.primary)
               ],
             ),
@@ -345,9 +363,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
                                   Text(
                                     item.shop.name,
                                     style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.black),
                                   ),
                                   DView.spaceHeight(4),
                                   Row(
@@ -405,7 +423,10 @@ class _HomeViewState extends ConsumerState<HomeView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                DView.textTitle('Recommendation', color: Colors.black),
+                const Text(
+                  'Recommendation',
+                  style: TextStyle(fontSize: 20),
+                ),
                 DView.textAction(() {}, color: AppColors.primary),
               ],
             ),
@@ -413,8 +434,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
           if (list.isEmpty)
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
-              child: ErrorBackgorud(
-                  ratio: 1.2, message: 'No Recommendation Yet'),
+              child:
+                  ErrorBackgorud(ratio: 1.2, message: 'No Recommendation Yet'),
             ),
           if (list.isNotEmpty)
             SizedBox(
@@ -509,9 +530,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
                                         Text(
                                           item.name,
                                           style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Colors.black),
                                         ),
                                         DView.spaceHeight(4),
                                         Row(

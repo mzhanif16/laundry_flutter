@@ -189,10 +189,15 @@ class _MyLaundryViewState extends ConsumerState<MyLaundryView> {
                           message: 'Empty',
                         ),
                         Positioned(
-                          left: 0,
+                            left: 0,
                             right: 0,
                             bottom: 20,
-                            child: IconButton(onPressed: ()=> getLaundry(), icon: const Icon(Icons.refresh, color: Colors.white,)))
+                            child: IconButton(
+                                onPressed: () => getLaundry(),
+                                icon: const Icon(
+                                  Icons.refresh,
+                                  color: Colors.white,
+                                )))
                       ],
                     ),
                   );
@@ -221,8 +226,12 @@ class _MyLaundryViewState extends ConsumerState<MyLaundryView> {
                   ),
                   itemBuilder: (context, element) {
                     return GestureDetector(
-                      onTap: (){
-                        Nav.push(context, DetailLaundryPage(laundry: element,));
+                      onTap: () {
+                        Nav.push(
+                            context,
+                            DetailLaundryPage(
+                              laundry: element,
+                            ));
                       },
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 20),
@@ -242,7 +251,8 @@ class _MyLaundryViewState extends ConsumerState<MyLaundryView> {
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 18),
+                                        fontSize: 18,
+                                        color: Colors.black),
                                   ),
                                 ),
                                 DView.spaceWidth(),
@@ -250,7 +260,9 @@ class _MyLaundryViewState extends ConsumerState<MyLaundryView> {
                                   AppFormat.longPrice(element.total),
                                   textAlign: TextAlign.end,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w500, fontSize: 18),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                      color: Colors.black),
                                 ),
                               ],
                             ),
@@ -291,6 +303,7 @@ class _MyLaundryViewState extends ConsumerState<MyLaundryView> {
                                     '${element.weight}kg',
                                     textAlign: TextAlign.end,
                                     style: const TextStyle(
+                                        color: Colors.black,
                                         fontWeight: FontWeight.w300),
                                   ),
                                 ),
@@ -353,7 +366,7 @@ class _MyLaundryViewState extends ConsumerState<MyLaundryView> {
                             height: 1,
                             color: category == categorySelected
                                 ? Colors.white
-                                : Colors.black),
+                                : AppColors.primary),
                       ),
                     ),
                   ),

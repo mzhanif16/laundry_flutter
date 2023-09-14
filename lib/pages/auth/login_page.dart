@@ -34,8 +34,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (!validInput) return;
     setLoginStatus(ref, 'Loading');
 
-    UserDatasource.login(edtEmail.text, edtPassword.text)
-        .then((value) {
+    UserDatasource.login(edtEmail.text, edtPassword.text).then((value) {
       String newStatus = '';
       value.fold((failure) {
         switch (failure.runtimeType) {
@@ -218,21 +217,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               ),
                               DView.spaceWidth(10),
                               Expanded(
-                                child: Consumer(
-                                  builder: (_,wiRef,__) {
-                                    String status = wiRef.watch(loginStatusProvider);
-                                    if(status == 'Loading'){
-                                      return DView.loadingCircle();
-                                    }
-                                    return ElevatedButton(
-                                      onPressed: () => execute(),
-                                      style: const ButtonStyle(
-                                        alignment: Alignment.centerLeft,
-                                      ),
-                                      child: const Text('Login'),
-                                    );
+                                child: Consumer(builder: (_, wiRef, __) {
+                                  String status =
+                                      wiRef.watch(loginStatusProvider);
+                                  if (status == 'Loading') {
+                                    return DView.loadingCircle();
                                   }
-                                ),
+                                  return ElevatedButton(
+                                    onPressed: () => execute(),
+                                    style: const ButtonStyle(
+                                      alignment: Alignment.centerLeft,
+                                    ),
+                                    child: const Text('Login'),
+                                  );
+                                }),
                               ),
                             ],
                           ),

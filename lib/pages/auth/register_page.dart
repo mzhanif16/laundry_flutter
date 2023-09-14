@@ -242,21 +242,20 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               ),
                               DView.spaceWidth(10),
                               Expanded(
-                                child: Consumer(
-                                  builder: (_,wiRef,__) {
-                                    String status = wiRef.watch(registerStatusProvider);
-                                    if(status == 'Loading'){
-                                      return DView.loadingCircle();
-                                    }
-                                    return ElevatedButton(
-                                      onPressed: () => execute(),
-                                      style: const ButtonStyle(
-                                        alignment: Alignment.centerLeft,
-                                      ),
-                                      child: const Text('Register'),
-                                    );
+                                child: Consumer(builder: (_, wiRef, __) {
+                                  String status =
+                                      wiRef.watch(registerStatusProvider);
+                                  if (status == 'Loading') {
+                                    return DView.loadingCircle();
                                   }
-                                ),
+                                  return ElevatedButton(
+                                    onPressed: () => execute(),
+                                    style: const ButtonStyle(
+                                      alignment: Alignment.centerLeft,
+                                    ),
+                                    child: const Text('Register'),
+                                  );
+                                }),
                               ),
                             ],
                           ),

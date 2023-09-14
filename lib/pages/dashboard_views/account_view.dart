@@ -1,6 +1,7 @@
 import 'package:d_info/d_info.dart';
 import 'package:d_view/d_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:laundry_flutter/config/app_assets.dart';
 import 'package:laundry_flutter/config/app_colors.dart';
@@ -8,8 +9,11 @@ import 'package:laundry_flutter/config/app_session.dart';
 import 'package:laundry_flutter/config/nav.dart';
 import 'package:laundry_flutter/models/user_model.dart';
 import 'package:laundry_flutter/pages/auth/login_page.dart';
+import 'package:laundry_flutter/providers/theme_provider.dart';
+import 'package:provider/provider.dart';
 
-class Account extends StatelessWidget {
+
+class Account extends ConsumerWidget {
   const Account({super.key});
 
   logout(BuildContext context){
@@ -27,7 +31,8 @@ class Account extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeProvider);
     return FutureBuilder(
         future: AppSession.getUser(),
         builder: (context, snapshot){
@@ -144,15 +149,19 @@ class Account extends StatelessWidget {
               ),
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 30),
-                onTap: (){},
+                onTap: (){
+                ref.read(themeProvider.notifier).toggleTheme();
+              },
                 dense: true,
                 horizontalTitleGap: 0,
                 leading: const Icon(Icons.dark_mode),
                 title: const Text('Dark Mode'),
                 trailing: Switch(
                   activeColor: AppColors.primary,
-                  value: true,
-                  onChanged: (value) {},
+                  value: themeMode == ThemeMode.dark,
+                  onChanged: (value) {
+                    ref.read(themeProvider.notifier).toggleTheme();
+                  },
                 ),
               ),
               ListTile(
