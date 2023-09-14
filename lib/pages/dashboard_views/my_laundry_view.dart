@@ -10,9 +10,11 @@ import 'package:laundry_flutter/config/app_constants.dart';
 import 'package:laundry_flutter/config/app_format.dart';
 import 'package:laundry_flutter/config/app_session.dart';
 import 'package:laundry_flutter/config/failure.dart';
+import 'package:laundry_flutter/config/nav.dart';
 import 'package:laundry_flutter/datasources/laundry_datasource.dart';
 import 'package:laundry_flutter/models/laundry_model.dart';
 import 'package:laundry_flutter/models/user_model.dart';
+import 'package:laundry_flutter/pages/detail_laundry_page.dart';
 import 'package:laundry_flutter/widgets/error_background.dart';
 
 import '../../providers/my_laundry_provider.dart';
@@ -178,11 +180,20 @@ class _MyLaundryViewState extends ConsumerState<MyLaundryView> {
                       .toList();
                 }
                 if (list.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.fromLTRB(30, 0, 30, 80),
-                    child: ErrorBackgorud(
-                      ratio: 16 / 9,
-                      message: 'Empty',
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 30, 30, 80),
+                    child: Stack(
+                      children: [
+                        const ErrorBackgorud(
+                          ratio: 16 / 9,
+                          message: 'Empty',
+                        ),
+                        Positioned(
+                          left: 0,
+                            right: 0,
+                            bottom: 20,
+                            child: IconButton(onPressed: ()=> getLaundry(), icon: const Icon(Icons.refresh, color: Colors.white,)))
+                      ],
                     ),
                   );
                 }
@@ -209,79 +220,84 @@ class _MyLaundryViewState extends ConsumerState<MyLaundryView> {
                         child: Text(value)),
                   ),
                   itemBuilder: (context, element) {
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.blue[50],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  element.shop.name,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                              ),
-                              DView.spaceWidth(),
-                              Text(
-                                AppFormat.longPrice(element.total),
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500, fontSize: 18),
-                              ),
-                            ],
-                          ),
-                          DView.spaceHeight(12),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (element.withPickup)
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(4)),
-                                  margin: const EdgeInsets.only(right: 8),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 4),
-                                  child: const Text(
-                                    'Pickup',
-                                    style: TextStyle(
-                                        color: Colors.white, height: 1),
+                    return GestureDetector(
+                      onTap: (){
+                        Nav.push(context, DetailLaundryPage(laundry: element,));
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.blue[50],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    element.shop.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
                                   ),
                                 ),
-                              if (element.withDelivery)
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(4)),
-                                  margin: const EdgeInsets.only(right: 8),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 4),
-                                  child: const Text(
-                                    'Delivery',
-                                    style: TextStyle(
-                                        color: Colors.white, height: 1),
-                                  ),
-                                ),
-                              Expanded(
-                                child: Text(
-                                  '${element.weight}kg',
+                                DView.spaceWidth(),
+                                Text(
+                                  AppFormat.longPrice(element.total),
                                   textAlign: TextAlign.end,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w300),
+                                      fontWeight: FontWeight.w500, fontSize: 18),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
+                              ],
+                            ),
+                            DView.spaceHeight(12),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (element.withPickup)
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: AppColors.primary,
+                                        borderRadius: BorderRadius.circular(4)),
+                                    margin: const EdgeInsets.only(right: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 4),
+                                    child: const Text(
+                                      'Pickup',
+                                      style: TextStyle(
+                                          color: Colors.white, height: 1),
+                                    ),
+                                  ),
+                                if (element.withDelivery)
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: AppColors.primary,
+                                        borderRadius: BorderRadius.circular(4)),
+                                    margin: const EdgeInsets.only(right: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 4),
+                                    child: const Text(
+                                      'Delivery',
+                                      style: TextStyle(
+                                          color: Colors.white, height: 1),
+                                    ),
+                                  ),
+                                Expanded(
+                                  child: Text(
+                                    '${element.weight}kg',
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     );
                   },

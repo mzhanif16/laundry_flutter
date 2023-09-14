@@ -38,7 +38,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   getPromo() {
     PromoDataSource.readLimit().then((value) {
-      String newStatus = '';
       value.fold((failure) {
         switch (failure.runtimeType) {
           case ServerFailure:
@@ -75,7 +74,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   getRecommendation() {
     ShopDataSource.readRecommendationLimit().then((value) {
-      String newStatus = '';
       value.fold((failure) {
         switch (failure.runtimeType) {
           case ServerFailure:

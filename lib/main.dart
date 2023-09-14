@@ -56,10 +56,8 @@ class MyApp extends StatelessWidget {
             return DView.loadingCircle();
           }
           if (snapshot.data == null) {
-            print('user: null');
             return const LoginPage();
           }
-          print(snapshot.data!.toJson());
           return const DashboardPage();
         },
       ),

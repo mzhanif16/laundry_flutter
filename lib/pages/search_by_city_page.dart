@@ -22,8 +22,8 @@ class _SearchByCityState extends ConsumerState<SearchByCity> {
   final edtSearch = TextEditingController();
 
   execute() {
-    setSearchByCityStatus(ref, 'Loading');
     ShopDataSource.searchByCity(edtSearch.text).then((value){
+      setSearchByCityStatus(ref, 'Loading');
       value.fold((failure) {
         switch(failure.runtimeType){
           case ServerFailure:
@@ -103,7 +103,6 @@ class _SearchByCityState extends ConsumerState<SearchByCity> {
         builder: (_,wiRef,__){
           String status = wiRef.watch(searchByCityStatusProvider);
           List<ShopModel> list = wiRef.watch(searchByCityListProvider);
-          print(status);
           if(status==''){
             return DView.nothing();
           }
